@@ -1,4 +1,6 @@
-3#mmini-project
+#mmini-project
+
+Link Linkedin: https://www.linkedin.com/in/muhammad-wildan-zulfahmi-195b913a5/
 
 ========================================================================
 ✅ 1️⃣ CREATE DATABASE
