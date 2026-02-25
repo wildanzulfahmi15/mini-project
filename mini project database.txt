@@ -1,0 +1,287 @@
+
+D:\laragon\bin\mysql\mysql-8.4.3-winx64\bin>mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 31
+Server version: 8.4.3 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database db_bioskop;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use db_bioskop;
+Database changed
+mysql> create table pemesan(
+    ->     id_pemesan int auto_increment primary key,
+    ->     nama varchar(100),
+    ->     no_telepon varchar(15));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table film(
+    ->     id_film int auto_increment primary key,
+    ->     judul varchar(100),
+    ->     genre varchar(50),
+    ->     harga int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table transaksi(
+    ->      id_transaksi int auto_increment primary key,
+    ->      id_pemesan int,
+    ->      id_film int,
+    ->      tanggal date,
+    ->      foreign key(id_pemesan) references pemesan(id_pemesan),
+    ->      foreign key(id_film) references film(id_film));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> insert into film (judul,genre,harga) values
+    ->      ('Avengers', 'Action',50000),
+    ->      ('Frozen', 'Action',50000),
+    ->      ('Ejen Ali The Movie', 'Action',50000),
+    ->      ('Spiderman', 'Action',10000),
+    ->      ('Iron Man', 'Action',8000);
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from film;
++---------+--------------------+--------+-------+
+| id_film | judul              | genre  | harga |
++---------+--------------------+--------+-------+
+|       1 | Avengers           | Action | 50000 |
+|       2 | Frozen             | Action | 50000 |
+|       3 | Ejen Ali The Movie | Action | 50000 |
+|       4 | Spiderman          | Action | 10000 |
+|       5 | Iron Man           | Action |  8000 |
++---------+--------------------+--------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into pemesan (nama,no_telepon) values
+    -> ('Wildan','081223123'),
+    -> ('Rahma', '01293019212'),
+    -> ('Jaya', '082322312'),
+    -> ('Nabil','081231239'),
+    -> ('Rizki','08219391');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> insert into transaksi(id_pemesan,id_film,tanggal) values
+    ->      (1,2,'2026-02-25'),
+    ->      (1,1,'2026-02-28'),
+    ->      (3,1,'2026-02-20'),
+    ->      (2,5,'2026-02-20'),
+    ->      (4,4,'2026-02-20');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> alter table film
+    -> add column deskripsi text;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from film;
++---------+--------------------+--------+-------+-----------+
+| id_film | judul              | genre  | harga | deskripsi |
++---------+--------------------+--------+-------+-----------+
+|       1 | Avengers           | Action | 50000 | NULL      |
+|       2 | Frozen             | Action | 50000 | NULL      |
+|       3 | Ejen Ali The Movie | Action | 50000 | NULL      |
+|       4 | Spiderman          | Action | 10000 | NULL      |
+|       5 | Iron Man           | Action |  8000 | NULL      |
++---------+--------------------+--------+-------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> alter table film
+    -> modify column deskripsi varchar(100);
+Query OK, 5 rows affected (0.08 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> describe  film;
++-----------+--------------+------+-----+---------+----------------+
+| Field     | Type         | Null | Key | Default | Extra          |
++-----------+--------------+------+-----+---------+----------------+
+| id_film   | int          | NO   | PRI | NULL    | auto_increment |
+| judul     | varchar(100) | YES  |     | NULL    |                |
+| genre     | varchar(50)  | YES  |     | NULL    |                |
+| harga     | int          | YES  |     | NULL    |                |
+| deskripsi | varchar(100) | YES  |     | NULL    |                |
++-----------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> alter table film
+    -> rename column deskripsi to info;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe film;
++---------+--------------+------+-----+---------+----------------+
+| Field   | Type         | Null | Key | Default | Extra          |
++---------+--------------+------+-----+---------+----------------+
+| id_film | int          | NO   | PRI | NULL    | auto_increment |
+| judul   | varchar(100) | YES  |     | NULL    |                |
+| genre   | varchar(50)  | YES  |     | NULL    |                |
+| harga   | int          | YES  |     | NULL    |                |
+| info    | varchar(100) | YES  |     | NULL    |                |
++---------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> alter table film
+    -> drop column info;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe film;
++---------+--------------+------+-----+---------+----------------+
+| Field   | Type         | Null | Key | Default | Extra          |
++---------+--------------+------+-----+---------+----------------+
+| id_film | int          | NO   | PRI | NULL    | auto_increment |
+| judul   | varchar(100) | YES  |     | NULL    |                |
+| genre   | varchar(50)  | YES  |     | NULL    |                |
+| harga   | int          | YES  |     | NULL    |                |
++---------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> create table table_tes(
+    ->     id_pemesan int auto_increment primary key,
+    ->     nama varchar(100),
+    ->     no_telepon varchar(15));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> drop table table_tes;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table table_tes(
+    ->     id_pemesan int auto_increment primary key,
+    ->     nama varchar(100),
+    ->     no_telepon varchar(15));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> rename table table_tes to testing;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> drop table testing;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> truncate table transaksi;
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> select * from transaksi;
+Empty set (0.00 sec)
+
+mysql> insert into transaksi(id_pemesan,id_film,tanggal) values
+    ->      (1,2,'2026-02-25'),
+    ->      (1,1,'2026-02-28'),
+    ->      (3,1,'2026-02-20'),
+    ->      (2,5,'2026-02-20'),
+    ->      (4,4,'2026-02-20');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> update transaksi set id_film = 3 where id_transaksi = 5;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from transaksi;
++--------------+------------+---------+------------+
+| id_transaksi | id_pemesan | id_film | tanggal    |
++--------------+------------+---------+------------+
+|            1 |          1 |       2 | 2026-02-25 |
+|            2 |          1 |       1 | 2026-02-28 |
+|            3 |          3 |       1 | 2026-02-20 |
+|            4 |          2 |       5 | 2026-02-20 |
+|            5 |          4 |       3 | 2026-02-20 |
++--------------+------------+---------+------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into transaksi(id_pemesan,id_film,tanggal)values(1,1,'2026-06-25');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from transaksi;
++--------------+------------+---------+------------+
+| id_transaksi | id_pemesan | id_film | tanggal    |
++--------------+------------+---------+------------+
+|            1 |          1 |       2 | 2026-02-25 |
+|            2 |          1 |       1 | 2026-02-28 |
+|            3 |          3 |       1 | 2026-02-20 |
+|            4 |          2 |       5 | 2026-02-20 |
+|            5 |          4 |       3 | 2026-02-20 |
+|            6 |          1 |       1 | 2026-06-25 |
++--------------+------------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> delete from transaksi where id_transaksi = 1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from transaksi;
++--------------+------------+---------+------------+
+| id_transaksi | id_pemesan | id_film | tanggal    |
++--------------+------------+---------+------------+
+|            2 |          1 |       1 | 2026-02-28 |
+|            3 |          3 |       1 | 2026-02-20 |
+|            4 |          2 |       5 | 2026-02-20 |
+|            5 |          4 |       3 | 2026-02-20 |
+|            6 |          1 |       1 | 2026-06-25 |
++--------------+------------+---------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select f.id_film,f.judul,count(t.id_film) as total_pemesanan
+    -> from transaksi t
+    -> join film f on f.id_film = t.id_film
+    -> group by f.id_film, f.judul
+    -> order by total_pemesanan desc limit 1;
++---------+----------+-----------------+
+| id_film | judul    | total_pemesanan |
++---------+----------+-----------------+
+|       1 | Avengers |               3 |
++---------+----------+-----------------+
+1 row in set (0.00 sec)
+
+mysql> select p.id_pemesan,p.nama,count(t.id_pemesan) as banyak_memesan
+    -> from transaksi t
+    -> join pemesan p on p.id_pemesan = t.id_pemesan
+    -> group by p.id_pemesan, p.nama
+    -> order by banyak_memesan desc limit 1;
++------------+--------+----------------+
+| id_pemesan | nama   | banyak_memesan |
++------------+--------+----------------+
+|          1 | Wildan |              2 |
++------------+--------+----------------+
+1 row in set (0.00 sec)
+
+mysql> create view film_terlaris as
+    -> select f.id_film,f.judul,count(t.id_film) as total_pemesanan
+    -> from transaksi t
+    -> join film f on f.id_film = t.id_film
+    -> group by f.id_film, f.judul
+    -> order by total_pemesanan desc limit 1;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from film_terlaris;
++---------+----------+-----------------+
+| id_film | judul    | total_pemesanan |
++---------+----------+-----------------+
+|       1 | Avengers |               3 |
++---------+----------+-----------------+
+1 row in set (0.00 sec)
+
+mysql> create view pelanggan_terbanyak as
+    -> select p.id_pemesan,p.nama,count(t.id_pemesan) as banyak_memesan
+    -> from transaksi t
+    -> join pemesan p on p.id_pemesan = t.id_pemesan
+    -> group by p.id_pemesan, p.nama
+    -> order by banyak_memesan desc limit 1;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from pelanggan_terbanyak;
++------------+--------+----------------+
+| id_pemesan | nama   | banyak_memesan |
++------------+--------+----------------+
+|          1 | Wildan |              2 |
++------------+--------+----------------+
+1 row in set (0.00 sec)
+
+mysql>
